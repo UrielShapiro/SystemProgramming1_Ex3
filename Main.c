@@ -2,35 +2,66 @@
 #include <string.h>
 #include "StrList.h"
 
+char* inputString()
+{
+    char* str = (char*)malloc(sizeof(char));
+    *str = '\0';
+    while ((c=getchar())!=' ')
+    {
+        size_t size = strlen(str);
+        str = (char*)realloc(str, size+2);
+        str[size]=c;
+        str[size+1]='\0';
+    }
+    return str;
+}
+
+
+StrList* scanList(StrList* list)
+{
+    int num_of_elements;
+    scanf("%d", &num_of_elements);
+    printf("Allocating a new StrList\n");
+    // StrList* list = StrList_alloc();
+    printf("Write your string\n");
+    char c;
+    while(num_of_elements > 0)
+    {
+        char* str = (char*)malloc(sizeof(char));
+        *str = '\0';
+        while ((c=getchar())!=' ')
+        {
+            size_t size = strlen(str);
+            str = (char*)realloc(str, size+2);
+            str[size]=c;
+            str[size+1]='\0';
+        }
+        num_of_elements--;
+        StrList_insertLast(list, str);
+    }
+    return list;
+}
+void insertAt(StrList* list)
+{
+    printf("Enter an index\n");
+    int index = scanf("%d", &index);
+    printf("Enter a string %d\n", index);
+    char* str;
+    scanf("%s", str);
+    StrList_insertAt(list, str, index);
+}
+
 int main() {
     int choice = scanf("%d", &choice);
-
+    StrList* list = StrList_alloc();
     switch (choice) {
     case 0:
-        break;
+            break;
     case 1:
-        int num_of_elements = scanf("%d", &num_of_elements);
-        printf("Allocating a new StrList\n");
-        StrList* list = StrList_alloc();
-        printf("Write your string\n");
-        char* string = scanf("%s", string);
-        int i = num_of_elements;
-        while (i) {
-            char str[] = "";
-            while(*string != " ") {
-                char str1 = *string;
-                strcat(str,str1);
-            }
-            i--;
-            StrList_insertLast(list, string);
-        }
+        scanList(list);
         break;
     case 2:
-        printf("Enter an index\n");
-        int index = scanf("%d", &index);
-        printf("Enter a string %d\n", index);
-        char* str = scanf("%s", str);
-        StrList_insertAt(list, index, str);
+        insertAt();
         break;
     case 3:
         StrList_print(list);
@@ -84,3 +115,4 @@ int main() {
 
     return 0;
 }
+
