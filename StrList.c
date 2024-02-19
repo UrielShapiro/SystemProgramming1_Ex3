@@ -6,36 +6,36 @@
 #define _STRLIST_C
 #define FALSE 0
 #define TRUE 1
-struct _StrList
-{
-    struct _Node *head;
-    size_t size;
-};
 struct _Node
 {
     char *data;
     struct _Node *next;
     struct _Node *previous;
 };
-
 typedef struct _Node Node;
+
+struct _StrList
+{
+    struct _Node* head;
+    size_t size;
+};
+
+
 
 StrList* StrList_alloc()
 {
-    printf("the error is in line 24");
-    StrList *sList = (StrList*)malloc(sizeof(StrList));
-    printf("the error is in line 26");
-    sList->head = NULL; 
+    StrList* sList = (StrList*)malloc(sizeof(StrList));
     sList->size = 0;
+    Node* p = (Node*)calloc(1 ,sizeof(Node));
+    sList->head = p;
     sList->head->next = NULL;
     sList->head->previous = NULL;
-    printf("the error is in line 31");
     return sList;
 }
 
 void StrList_free(StrList* StrList)
 {
-    Node* temp = StrList->head;
+    Node * temp = &StrList->head;
     size_t size= StrList_size(StrList);
     for (size_t i = 0; i < size; i++)
     {
@@ -46,18 +46,19 @@ void StrList_free(StrList* StrList)
 }
 size_t StrList_size(const StrList* StrList)
 {
-    size_t size = 0;
-    Node* temp = StrList->head;
-    while (temp)
-    {
-        temp = temp->next;
-        size++;
-    }
-    return size;
+    // size_t size = 0;
+    // Node * temp = &StrList->head;
+    // while (temp)
+    // {
+    //     temp = temp->next;
+    //     size++;
+    // }
+    return StrList->size;
 }
 void StrList_insertAt(StrList* StrList,const char* data,int index)
 {
-    Node* temp = StrList->head;
+    printf("Got to the insertAt\n");
+    Node* temp = &StrList->head;
     int i = 0;
     while(i < index)
     {
@@ -68,11 +69,13 @@ void StrList_insertAt(StrList* StrList,const char* data,int index)
     strcpy(str, data);
     Node* current = (Node*)malloc(sizeof(Node));
     current->data = str;
-    current->next = temp->next;
-    current->previous = temp;
-    temp->next->previous = current;
-    temp->next = current;
-    StrList->size++;
+    current->next = temp;
+    printf("the problem is in 74\n");
+    current->previous = temp->previous;
+    printf("the problem is in 76\n");
+    temp->previous = current;
+    printf("the problem is in 78\n");
+    StrList->size= StrList->size+1;
 }
 void StrList_insertLast(StrList* StrList,const char* data)
 {
@@ -85,7 +88,7 @@ char* StrList_firstData(const StrList* StrList)
 }
 void StrList_printAt(const StrList* Strlist,int index)
 {
-        Node* temp = Strlist->head;
+        const Node* temp = Strlist->head;
         size_t i = 0;
         while (i < index)
         {
@@ -139,6 +142,7 @@ void StrList_removeAt(StrList* StrList, int index)
     }
     temp->next->previous = temp->previous;
     temp->previous->next = temp->next;
+    StrList->size=StrList->size-1;
     free(temp);
 }
 
@@ -222,11 +226,6 @@ void StrList_reverse( StrList* StrList)
         temp = temp->previous;
     }
 }
-
-
-
-
-
 
 #endif
     

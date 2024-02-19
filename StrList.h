@@ -1,6 +1,4 @@
 #pragma once
-#ifndef _STRLIST_H
-#define _STRLIST_H
 #include <stdlib.h>
 
 /********************************************************************************
@@ -111,4 +109,3 @@ void StrList_reverse( StrList* StrList);
 //  * returns 1 for sorted,   0 otherwise
 //  */
 // int StrList_isSorted(StrList* StrList);
-#endif

@@ -12,7 +12,7 @@ StrList: Main.o StrList.a
 StrList.o: StrList.c StrList.h
 	$(CC) $(FLAGS) -c $<
 
-Main.o: Main.c StrList.h
+Main.o: Main.c StrList.o StrList.h
 	$(CC) $(FLAGS) -c $<
 
 StrList.a: StrList.o
