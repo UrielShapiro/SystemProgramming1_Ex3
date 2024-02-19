@@ -104,11 +104,11 @@ void StrList_reverse( StrList* StrList);
 /*
  * Sort the given list in lexicographical order 
  */
-void StrList_sort( StrList* StrList);
+// void StrList_sort( StrList* StrList);
 
-/*
- * Checks if the given list is sorted in lexicographical order
- * returns 1 for sorted,   0 otherwise
- */
-int StrList_isSorted(StrList* StrList);
+// /*
+//  * Checks if the given list is sorted in lexicographical order
+//  * returns 1 for sorted,   0 otherwise
+//  */
+// int StrList_isSorted(StrList* StrList);
 #endif

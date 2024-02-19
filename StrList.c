@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "StrList.h"
 #ifndef _STRLIST_C
 #define _STRLIST_C
@@ -21,18 +22,22 @@ typedef struct _Node Node;
 
 StrList* StrList_alloc()
 {
+    printf("the error is in line 24");
     StrList *sList = (StrList*)malloc(sizeof(StrList));
+    printf("the error is in line 26");
     sList->head = NULL; 
     sList->size = 0;
     sList->head->next = NULL;
     sList->head->previous = NULL;
+    printf("the error is in line 31");
     return sList;
 }
 
 void StrList_free(StrList* StrList)
 {
     Node* temp = StrList->head;
-    for (size_t i = 0; i < StrList_size; i++)
+    size_t size= StrList_size(StrList);
+    for (size_t i = 0; i < size; i++)
     {
         Node* next = temp->next;
         free(temp);
@@ -50,17 +55,13 @@ size_t StrList_size(const StrList* StrList)
     }
     return size;
 }
-void StrList_insertLast(StrList* StrList,const char* data)
-{
-    StrList_insertAt(StrList, data, StrList_size(StrList));
-}
 void StrList_insertAt(StrList* StrList,const char* data,int index)
 {
     Node* temp = StrList->head;
     int i = 0;
     while(i < index)
     {
-        temp = &temp->next;
+        temp = temp->next;
         i++;
     }
     char* str = (char*)malloc(sizeof(char) * strlen(data));
@@ -73,19 +74,14 @@ void StrList_insertAt(StrList* StrList,const char* data,int index)
     temp->next = current;
     StrList->size++;
 }
+void StrList_insertLast(StrList* StrList,const char* data)
+{
+    StrList_insertAt(StrList, data, StrList_size(StrList));
+}
 char* StrList_firstData(const StrList* StrList)
 {
     char* output = StrList->head->data;
     return output;
-}
-void StrList_print(const StrList* StrList)
-{
-    size_t size = 0;
-    while (size < StrList_size(StrList))
-    {
-        StrList_printAt(StrList, size);
-        size++;
-    }
 }
 void StrList_printAt(const StrList* Strlist,int index)
 {
@@ -97,6 +93,15 @@ void StrList_printAt(const StrList* Strlist,int index)
             i++;
         }
         printf("%s",temp->data);
+}
+void StrList_print(const StrList* StrList)
+{
+    size_t size = 0;
+    while (size < StrList_size(StrList))
+    {
+        StrList_printAt(StrList, size);
+        size++;
+    }
 }
 int StrList_printLen(const StrList* Strlist)
 {
@@ -182,7 +187,7 @@ StrList* StrList_clone(const StrList* list)
     Node* list_node = list->head;
     for (size_t i = 0; i < StrList_size(list); i++)
     {
-        char* data;
+        char* data=NULL;
         strcpy(data,list_node->data);
         StrList_insertLast(output, data);
         list_node = list_node->next;
@@ -217,9 +222,6 @@ void StrList_reverse( StrList* StrList)
         temp = temp->previous;
     }
 }
-
-
-
 
 
 
