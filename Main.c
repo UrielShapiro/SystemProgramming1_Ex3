@@ -8,13 +8,15 @@ char* inputString()
 {
     char* str = (char*)malloc(sizeof(char));
     *str = '\0';
-    char c;
-    while ((c=getchar())!=' ')
+    getchar();
+    char c=getchar();
+    while (c !=' '&& c != '\n')
     {
         size_t size = strlen(str);
         str = (char*)realloc(str, size+2);
         str[size]=c;
         str[size+1]='\0';
+        c = getchar();
     }
     return str;
 }
@@ -26,7 +28,7 @@ StrList* scanList(StrList* list)
     printf("Enter the number of elements: \n");
     scanf("%d", &num_of_elements);
     printf("Write your string: \n");
-    char c=getchar();
+    char c=getchar();               //to clear the buffer from the space after entering the number of elements.
     while(num_of_elements > 0)
     {
         char* str = (char*)malloc(sizeof(char));
@@ -42,7 +44,6 @@ StrList* scanList(StrList* list)
 
         }
         num_of_elements--;
-        printf("num of elements: %d\n", num_of_elements);
         StrList_insertLast(list, str);
     }
     return list;
@@ -50,56 +51,72 @@ StrList* scanList(StrList* list)
 void insertAt(StrList* list)
 {
     printf("Enter an index\n");
-    int index = scanf("%d", &index);
-    printf("Enter a string %d\n", index);
-    char* str=NULL;
-    scanf("%s", str);
+    int index;
+    scanf("%d", &index);
+    size_t size = StrList_size(list);
+    if(index > size+1)
+    {
+        printf("error! can't insert to this index because it's out of range\n");
+        return;
+    }
+    printf("Enter a string\n");
+    char* str = inputString();
     StrList_insertAt(list, str, index);
 }
 
 int main() {
     printf("please enter a number: \n");
     int choice;
-    scanf("%d", &choice);
     StrList* list = StrList_alloc();
     printf("Allocated the list\n");
-    switch (choice) {
-    case 0:
+    scanf("%d", &choice);
+    while (choice!=0)
+    {
+       switch (choice) {
+        case 1:
+            scanList(list);
+            printf("case 1 is working\n");
             break;
-    case 1:
-        scanList(list);
-        printf("case 1 is working\n");
-        break;
+        case 2:
+            insertAt(list);
+            printf("case 2 is working\n");
+            break;
+        case 3:
+            StrList_print(list);
+            printf("case 3 is working\n");
+            break;
+        case 4:
+            printf("The size of the list is: %ld\n", StrList_size(list));
+            printf("case 4 is working\n");
+            break;
+        case 5:
+            printf("Enter an index\n");
+            int index_5;
+            scanf("%d", &index_5);
+            if(index_5 > StrList_size(list))
+            {
+                printf("error! can't print at this index because it's out of range\n");
+                break;
+            }
+            StrList_printAt(list, index_5);
+            break;
+        case 6:
+            printf("The amount of chars in the string is: %d\n", StrList_printLen(list));
+            break; 
+        case 7:
+            printf("Enter a string\n");
+            char* str_7 = inputString();
+            printf("The amount of times the string appears in the list is: %d\n", StrList_count(list, str_7));
+            break;
+        case 8:
+            printf("Enter a string: \n");
+            char* str_8 = inputString();
+            StrList_remove(list, str_8);
+            break;
+        }
+        scanf("%d", &choice);
     }
-    // case 2:
-    //     insertAt(list);
-    //     break;
-    // case 3:
-    //     StrList_print(list);
-    //     break;
-    // case 4:
-    //     printf("%ld", StrList_size(list));
-    //     break;
-    // case 5:
-    //     printf("Enter an index\n");
-    //     int index_5 = scanf("%d", &index_5);
-    //     StrList_printAt(list, index_5);
-    //     break;
-    // case 6:
-    //     printf("The amount of chars in the string is: %d", StrList_printLen(list));
-    //     break;
-    // case 7:
-    //     printf("Enter a string\n");
-    //     char* str_7 = NULL;
-    //     scanf("%s", str_7);
-    //     printf("The amount of times the string appears in the list is: %d", StrList_count(list, str_7));
-    //     break;
-    // case 8:
-    //     printf("Enter a string\n");
-    //     char* str_8 = NULL;
-    //     scanf("%s", str_8);
-    //     StrList_remove(list, str_8);
-    //     break;
+
     // case 9:
     //     printf("Enter an index\n");
     //     int index_9;
