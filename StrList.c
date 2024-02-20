@@ -138,41 +138,50 @@ int StrList_count(StrList* StrList, const char* data)
 }
 void StrList_removeAt(StrList* StrList, int index)
 {
-    Node* temp = StrList->head;
-    int i = 0;
-    while(i < index)
-    {
-        temp = temp->next;
-        i++;
-    }
-    StrList->size=StrList->size-1;
-    free(temp);
+    // Node* temp = StrList->head;
+    // int i = 0;
+    // while(i < index)
+    // {
+    //     temp = temp->next;
+    //     i++;
+    // }
+    // StrList->size=StrList->size-1;
+    // free(temp);
 }
 
 void StrList_remove(StrList* StrList, const char* data)
 {
-    Node* temp = StrList->head;
-    Node* previous = NULL;
-    for(int i = 0; i < StrList_size(StrList);i++)
-         {
-            previous = temp;
-            if (!strcmp(temp->data,data))
-            {   
-                if(temp == StrList->head)
-                {
-                    StrList->head = temp->next;
-                }
-                removed = temp->next;
-                if(temp->next != NULL)
-                {
-                    temp->next = NULL;
-                }
-                temp->next = temp->next->next;
-                
-                free(removed);
-            }
-             temp = temp->next;
-         }
+    if (StrList->size == 0)
+    {
+        printf("The list is empty\n");
+        return;
+    }
+    Node* p1=StrList->head;
+    Node* p2=p1->next;
+    while (p2 != NULL)
+    {
+        if(!strcmp(StrList->head->data, data))
+        {
+            p1 = p2;
+            free(StrList->head);
+            StrList->head = p1;
+            p2=p1->next;
+            StrList->size--;
+        }
+        else if(!strcmp(p2->data,data))
+        {
+            Node* removed=p2;
+            p2=p2->next;
+            free(removed);
+            p1->next=p2;
+            StrList->size--;
+        }
+        else
+        {
+            p2 = p2->next;
+            p1 = p1->next;
+        }
+    }
 }
 
 int StrList_isEqual(const StrList* StrList1, const StrList* StrList2)

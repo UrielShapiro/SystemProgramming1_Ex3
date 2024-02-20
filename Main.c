@@ -110,8 +110,15 @@ int main() {
             break;
         case 8:
             printf("Enter a string: \n");
-            char* str_8 = inputString();
+            const char* str_8 = inputString();
             StrList_remove(list, str_8);
+            StrList_print(list);
+            break;
+        case 9:
+            printf("Enter an index\n");
+            int index_9;
+            scanf("%d", &index_9);
+            StrList_removeAt(list, index_9);
             break;
         }
         scanf("%d", &choice);
