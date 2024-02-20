@@ -21,21 +21,25 @@ struct _StrList
 };
 
 
-
+Node* createNode(char* data, Node* n, Node* p)
+{
+    Node* node=(Node*)malloc (sizeof(Node));
+    node->data=data;
+    node->next=n;
+    node->previous=p;
+    return node;
+}
 StrList* StrList_alloc()
 {
     StrList* sList = (StrList*)malloc(sizeof(StrList));
     sList->size = 0;
-    Node* p = (Node*)calloc(1 ,sizeof(Node));
-    sList->head = p;
-    sList->head->next = NULL;
-    sList->head->previous = NULL;
+    sList->head = NULL;
     return sList;
 }
 
 void StrList_free(StrList* StrList)
 {
-    Node * temp = &StrList->head;
+    Node * temp = StrList->head;
     size_t size= StrList_size(StrList);
     for (size_t i = 0; i < size; i++)
     {
@@ -46,40 +50,48 @@ void StrList_free(StrList* StrList)
 }
 size_t StrList_size(const StrList* StrList)
 {
-    // size_t size = 0;
-    // Node * temp = &StrList->head;
-    // while (temp)
-    // {
-    //     temp = temp->next;
-    //     size++;
-    // }
     return StrList->size;
 }
 void StrList_insertAt(StrList* StrList,const char* data,int index)
 {
-    printf("Got to the insertAt\n");
-    Node* temp = &StrList->head;
-    int i = 0;
-    while(i < index)
-    {
-        temp = temp->next;
-        i++;
-    }
+    Node* temp;
+     Node* node;
     char* str = (char*)malloc(sizeof(char) * strlen(data));
     strcpy(str, data);
-    Node* current = (Node*)malloc(sizeof(Node));
-    current->data = str;
-    current->next = temp;
-    printf("the problem is in 74\n");
-    current->previous = temp->previous;
-    printf("the problem is in 76\n");
-    temp->previous = current;
-    printf("the problem is in 78\n");
+    if(StrList->size==0||index==0)
+    {
+        node= createNode(str, StrList->head, NULL);
+        StrList->head=node;
+        if(index==0)
+        {
+            StrList->head->previous=node;
+        }
+    }
+    else
+    {
+        temp = StrList->head;
+        int i = 0;
+        while(i < index-1)
+        {
+            temp = temp->next;
+            i++;
+        }
+        if (index==StrList->size)
+        {
+            node= createNode(str,NULL, temp);
+        }
+        else
+        {
+            node= createNode(str,temp->next, temp);
+            temp->next->previous=node;
+        }
+        temp->next=node;
+    }
     StrList->size= StrList->size+1;
 }
 void StrList_insertLast(StrList* StrList,const char* data)
 {
-    StrList_insertAt(StrList, data, StrList_size(StrList));
+       StrList_insertAt(StrList, data, StrList->size);
 }
 char* StrList_firstData(const StrList* StrList)
 {

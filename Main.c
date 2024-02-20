@@ -26,27 +26,23 @@ StrList* scanList(StrList* list)
     printf("Enter the number of elements: \n");
     scanf("%d", &num_of_elements);
     printf("Write your string: \n");
-    char c;
-    int end_of_text = false;
+    char c=getchar();
     while(num_of_elements > 0)
     {
-        printf("entered the while\n");
         char* str = (char*)malloc(sizeof(char));
         *str = '\0';
-        printf("%s hi\n", str);
-        while(c != ' ' && c !='\n')
+        c = getchar();
+        while(c != ' ' && c !='\n'&& c!= EOF)
         {
-                c = getchar();
-                printf("entered the second while\n");
                 size_t size = strlen(str);
                 str = (char*)realloc(str, size+2);
                 str[size]=c;
                 str[size+1]='\0';
+                c = getchar();
 
         }
         num_of_elements--;
         printf("num of elements: %d\n", num_of_elements);
-        printf("Got to the end of the while\n");
         StrList_insertLast(list, str);
     }
     return list;
@@ -72,7 +68,7 @@ int main() {
             break;
     case 1:
         scanList(list);
-        printf("case 1 is working");
+        printf("case 1 is working\n");
         break;
     }
     // case 2:
@@ -132,4 +128,3 @@ int main() {
      return 0;
 
 }
-
