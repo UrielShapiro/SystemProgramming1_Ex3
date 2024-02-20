@@ -257,13 +257,14 @@ void StrList_reverse( StrList* StrList)
 }
 void StrList_sort( StrList* StrList)
 {
-    char** arr = (char*)malloc(StrList_size(StrList));
+    char** arr = (char**)malloc(StrList_size(StrList));
     Node* current = StrList->head;
     for (size_t i = 0; i < StrList_size(StrList); i++)
     {
-        *(arr[i]) = (char*) malloc(strlen(current->data));
+        (arr[i]) = (char*) malloc(strlen(current->data)+1);
         strcpy(arr[i], current->data);
         current = current->next;
+        printf("arr[%ld] = %s\n",i,arr[i]);
     }
     for (size_t t = 0; t < StrList_size(StrList); t++)
     {
@@ -271,21 +272,26 @@ void StrList_sort( StrList* StrList)
         {
             if(strcmp(arr[t],arr[k]) > 0)
             {
-                char* temp = arr[t];
+                printf("compering %s with %s\n",arr[t],arr[k]);
+                char *temp = arr[t];
                 arr[t] = arr[k];
                 arr[k] = temp;
+
             }
         }
     }
+    printf("done sorting\n");
     current = StrList->head;
     strcpy(StrList->head->data, arr[0]);
     for (size_t m = 1; m < StrList_size(StrList); m++)
     {
+        printf("converting to list\n");
         current = current->next;
         strcpy(current->data, arr[m]);
     }
     for (size_t q = 0; q < StrList_size(StrList); q++)
     {
+        printf("freeing arr[%ld]\n",q);
         free(arr[q]);
     }
     free(arr);
