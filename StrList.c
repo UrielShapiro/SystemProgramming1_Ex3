@@ -35,17 +35,7 @@ StrList* StrList_alloc()
     return sList;
 }
 
-void StrList_free(StrList* StrList)
-{
-    Node * temp = StrList->head;
-    size_t size= StrList_size(StrList);
-    for (size_t i = 0; i < size; i++)
-    {
-        Node* next = temp->next;
-        free(temp);
-        temp = next->next;
-    }
-}
+
 size_t StrList_size(const StrList* StrList)
 {
     return StrList->size;
@@ -138,17 +128,38 @@ int StrList_count(StrList* StrList, const char* data)
 }
 void StrList_removeAt(StrList* StrList, int index)
 {
-    // Node* temp = StrList->head;
-    // int i = 0;
-    // while(i < index)
-    // {
-    //     temp = temp->next;
-    //     i++;
-    // }
-    // StrList->size=StrList->size-1;
-    // free(temp);
+    if (StrList->size == 0)
+    {
+        printf("The list is empty\n");
+        return;
+    }
+    Node* p1 = StrList->head;
+    Node* p2 = p1->next;
+    if (index == 0)
+    {
+        free(StrList->head);
+        StrList->head = p2;
+        StrList->size--;
+        return;
+    }
+    size_t i = 0;
+    while (i < index-1)
+    {
+        p1 = p2;
+        p2 = p2->next;
+        i++;
+    }
+    p1->next = p2->next;
+    free(p2);
+    StrList->size--;
 }
-
+void StrList_free(StrList* StrList)
+{
+    while(StrList_size(StrList) > 0)    //Will run as long as the list is not empty.
+    {
+        StrList_removeAt(StrList, 0);   //remove the head of the list, StrList_size times. eventually the list will be empty.
+    }
+}
 void StrList_remove(StrList* StrList, const char* data)
 {
     if (StrList->size == 0)
@@ -228,23 +239,58 @@ void copy_Node(Node* dst, Node* src)
 }
 void StrList_reverse( StrList* StrList)
 {
-    // Node* temp = StrList->head;
-    // Node* p;
-    // size_t i = 0;
-    // while(i < StrList_size(StrList))
-    // {
-    //     temp = temp->next;
-    //     i++;
-    // }
-    // i = 0 ;
-    // Node* head = (Node*)malloc(sizeof(Node));
-    // copy_Node(head,temp);
-    // StrList->head = head;
-    // while(i < StrList_size(StrList))
-    // {
-    //     temp->next = p;
-    // }
+    if(StrList_size(StrList) == 0 || StrList_size(StrList) == 1)
+    {
+        return;
+    }
+    Node* current = StrList->head;
+    Node* previous = NULL;
+    Node* next = NULL;
+    while (current != NULL)
+    {
+        next = current->next;
+        current->next = previous;
+        previous = current;
+        current = next;
+    }
+    StrList->head = previous;
 }
+void StrList_sort( StrList* StrList)
+{
+    char** arr = (char*)malloc(StrList_size(StrList));
+    Node* current = StrList->head;
+    for (size_t i = 0; i < StrList_size(StrList); i++)
+    {
+        *(arr[i]) = (char*) malloc(strlen(current->data));
+        strcpy(arr[i], current->data);
+        current = current->next;
+    }
+    for (size_t t = 0; t < StrList_size(StrList); t++)
+    {
+        for (size_t k = t+1; k < StrList_size(StrList); k++)
+        {
+            if(strcmp(arr[t],arr[k]) > 0)
+            {
+                char* temp = arr[t];
+                arr[t] = arr[k];
+                arr[k] = temp;
+            }
+        }
+    }
+    current = StrList->head;
+    strcpy(StrList->head->data, arr[0]);
+    for (size_t m = 1; m < StrList_size(StrList); m++)
+    {
+        current = current->next;
+        strcpy(current->data, arr[m]);
+    }
+    for (size_t q = 0; q < StrList_size(StrList); q++)
+    {
+        free(arr[q]);
+    }
+    free(arr);
+}
+
 
 #endif
     

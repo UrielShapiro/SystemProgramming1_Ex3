@@ -8,7 +8,7 @@ char* inputString()
 {
     char* str = (char*)malloc(sizeof(char));
     *str = '\0';
-    getchar();
+    //getchar();           //to clear the buffer from the \n after entering the number of elements.
     char c=getchar();
     while (c !=' '&& c != '\n')
     {
@@ -28,21 +28,22 @@ StrList* scanList(StrList* list)
     printf("Enter the number of elements: \n");
     scanf("%d", &num_of_elements);
     printf("Write your string: \n");
-    char c=getchar();               //to clear the buffer from the space after entering the number of elements.
+    getchar();               //to clear the buffer from the space after entering the number of elements.
     while(num_of_elements > 0)
     {
-        char* str = (char*)malloc(sizeof(char));
-        *str = '\0';
-        c = getchar();
-        while(c != ' ' && c !='\n'&& c!= EOF)
-        {
-                size_t size = strlen(str);
-                str = (char*)realloc(str, size+2);
-                str[size]=c;
-                str[size+1]='\0';
-                c = getchar();
+        // char* str = (char*)malloc(sizeof(char));
+        // *str = '\0';
+        // c = getchar();
+        // while(c != ' ' && c !='\n'&& c!= EOF)
+        // {
+        //         size_t size = strlen(str);
+        //         str = (char*)realloc(str, size+2);
+        //         str[size]=c;
+        //         str[size+1]='\0';
+        //         c = getchar();
 
-        }
+        // }
+        char* str = inputString();
         num_of_elements--;
         StrList_insertLast(list, str);
     }
@@ -119,17 +120,25 @@ int main() {
             int index_9;
             scanf("%d", &index_9);
             StrList_removeAt(list, index_9);
+            StrList_print(list);
             break;
+        case 10:
+            StrList_reverse(list);
+            StrList_print(list);
+            break;
+        case 11:
+            StrList_free(list);
+            StrList_print(list);
+            printf("The list is free\n");
+            break;
+        case 12:
+            StrList_sort(list);
+            StrList_print(list);
+            break;
+
         }
         scanf("%d", &choice);
     }
-
-    // case 9:
-    //     printf("Enter an index\n");
-    //     int index_9;
-    //     scanf("%d", &index_9);
-    //     StrList_removeAt(list, index_9);
-    //     break;
     // case 10:
     //     StrList_reverse(list);
     //     break;
