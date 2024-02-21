@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include "StrList.h"
 #ifndef _STRLIST_C
@@ -255,48 +256,44 @@ void StrList_reverse( StrList* StrList)
     }
     StrList->head = previous;
 }
-void StrList_sort( StrList* StrList)
-{
-    char** arr = (char**)malloc(StrList_size(StrList));
-    Node* current = StrList->head;
-    for (size_t i = 0; i < StrList_size(StrList); i++)
-    {
-        (arr[i]) = (char*) malloc(strlen(current->data)+1);
-        strcpy(arr[i], current->data);
-        current = current->next;
-        printf("arr[%ld] = %s\n",i,arr[i]);
-    }
-    for (size_t t = 0; t < StrList_size(StrList); t++)
-    {
-        for (size_t k = t+1; k < StrList_size(StrList); k++)
-        {
-            if(strcmp(arr[t],arr[k]) > 0)
-            {
-                printf("compering %s with %s\n",arr[t],arr[k]);
-                char *temp = arr[t];
-                arr[t] = arr[k];
-                arr[k] = temp;
 
-            }
-        }
-    }
-    printf("done sorting\n");
-    current = StrList->head;
-    strcpy(StrList->head->data, arr[0]);
-    for (size_t m = 1; m < StrList_size(StrList); m++)
-    {
-        printf("converting to list\n");
-        current = current->next;
-        strcpy(current->data, arr[m]);
-    }
-    for (size_t q = 0; q < StrList_size(StrList); q++)
-    {
-        printf("freeing arr[%ld]\n",q);
-        free(arr[q]);
-    }
-    free(arr);
+void SwapNodes(Node* a, Node* b)
+{
+    char* temp = a->data;
+    a->data = b->data;
+    b->data = temp;
 }
 
+void StrList_sort( StrList* StrList)
+{
+    Node* current = StrList->head;
+    for (size_t i = 0; i < StrList_size(StrList)-1; i++)
+    {
+        for (size_t j = 0; j < StrList_size(StrList)-i-1; j++)
+        {
+            if(strcmp(current->data,current->next->data) > 0)
+            {
+                SwapNodes(current, current->next);
+            }
+            current = current->next;
+        }
+        current = StrList->head;
+    }
+}
+
+int StrList_isSorted(StrList* StrList)
+{
+    Node* current = StrList->head;
+    for (size_t i = 0; i < StrList_size(StrList)-1; i++)
+    {
+        if(strcmp(current->data,current->next->data) > 0)
+        {
+            return FALSE;
+        }
+        current = current->next;
+    }
+    return TRUE;
+}
 
 #endif
     

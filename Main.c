@@ -1,19 +1,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include "StrList.h"
 
 char* inputString()
 {
     char* str = (char*)malloc(sizeof(char));
-    *str = '\0';
-    //getchar();           //to clear the buffer from the \n after entering the number of elements.
+    *str = '\0';          
     char c=getchar();
     while (c !=' '&& c != '\n')
     {
         size_t size = strlen(str);
-        str = (char*)realloc(str, size+2);
+        str = (char*)realloc(str, size+ 2 * sizeof(char));
         str[size]=c;
         str[size+1]='\0';
         c = getchar();
@@ -25,24 +23,10 @@ char* inputString()
 StrList* scanList(StrList* list)
 {
     int num_of_elements;
-    printf("Enter the number of elements: \n");
     scanf("%d", &num_of_elements);
-    printf("Write your string: \n");
     getchar();               //to clear the buffer from the space after entering the number of elements.
     while(num_of_elements > 0)
     {
-        // char* str = (char*)malloc(sizeof(char));
-        // *str = '\0';
-        // c = getchar();
-        // while(c != ' ' && c !='\n'&& c!= EOF)
-        // {
-        //         size_t size = strlen(str);
-        //         str = (char*)realloc(str, size+2);
-        //         str[size]=c;
-        //         str[size+1]='\0';
-        //         c = getchar();
-
-        // }
         char* str = inputString();
         num_of_elements--;
         StrList_insertLast(list, str);
@@ -66,29 +50,23 @@ void insertAt(StrList* list)
 }
 
 int main() {
-    printf("please enter a number: \n");
     int choice;
     StrList* list = StrList_alloc();
-    printf("Allocated the list\n");
     scanf("%d", &choice);
     while (choice!=0)
     {
        switch (choice) {
         case 1:
             scanList(list);
-            printf("case 1 is working\n");
             break;
         case 2:
             insertAt(list);
-            printf("case 2 is working\n");
             break;
         case 3:
             StrList_print(list);
-            printf("case 3 is working\n");
             break;
         case 4:
-            printf("The size of the list is: %ld\n", StrList_size(list));
-            printf("case 4 is working\n");
+            printf("%ld\n", StrList_size(list));
             break;
         case 5:
             printf("Enter an index\n");
@@ -135,29 +113,18 @@ int main() {
             StrList_sort(list);
             StrList_print(list);
             break;
+        case 13:
+            if(StrList_isSorted(list)) {
+                printf("true\n");
+            }
+            else {
+                printf("false\n");
+            }
+            break;
 
         }
         scanf("%d", &choice);
     }
-    // case 10:
-    //     StrList_reverse(list);
-    //     break;
-    // case 11:
-    //     StrList_free(list);
-    //     break;
-    // case 12:
-    //     if (!StrList_isSorted(list)) {
-    //         StrList_sort(list);
-    //     }
-    //     break;
-    // case 13:
-    //     if(StrList_isSorted(list)) {
-    //         printf("The list is sorted\n");
-    //     }
-        // else {
-        //     printf("The list is not sorted\n");
-        // }
-        // break;
      return 0;
 
 }
