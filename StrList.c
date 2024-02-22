@@ -83,7 +83,7 @@ char* StrList_firstData(const StrList* StrList)
 void StrList_printAt(const StrList* Strlist,int index)
 {
     Node* temp = Strlist->head;
-    for(size_t i=0; i<index;i++)
+    for(size_t i = 0; i < index; i++)
     {
         temp = temp->next;
     }
@@ -164,7 +164,7 @@ void StrList_free(StrList* StrList)
     {
         StrList_removeAt(StrList, 0);   //remove the head of the list, StrList_size times. eventually the list will be empty.
     }
-    StrList->head = NULL;
+    free(StrList);  //Free the list itself.
 }
 void StrList_remove(StrList* StrList, const char* data)
 {
@@ -179,6 +179,7 @@ void StrList_remove(StrList* StrList, const char* data)
         if(!strcmp(StrList->head->data, data))
         {
             p1 = p2;
+            free(StrList->head->data);
             free(StrList->head);
             StrList->head = p1;
             p2=p1->next;
@@ -188,6 +189,7 @@ void StrList_remove(StrList* StrList, const char* data)
         {
             Node* removed=p2;
             p2=p2->next;
+            free(removed->data);
             free(removed);
             p1->next=p2;
             StrList->size--;
@@ -204,64 +206,56 @@ int StrList_isEqual(const StrList* StrList1, const StrList* StrList2)
 {
     if(StrList_size(StrList1) != StrList_size(StrList2))
     {
-        return FALSE;
+        return FALSE;   //If the sizes of the lists are not equal, the lists cant be equal.
     }
     Node* t1 = StrList1->head;
     Node* t2 = StrList2->head;
     while(t1 && t2)
     {
-        if(strcmp(t1->data,t2->data) != 0)
+        if(strcmp(t1->data,t2->data) != 0)  //If the data of the nodes is not equal, the lists are not equal.
         {
             return FALSE;
         }
         t1 = t1->next;
         t2 = t2->next;
     }
-    return TRUE;
-}
-Node* Node_alloc()
-{
-    Node* output = (Node*)malloc(sizeof(Node));
-    return output;
+    return TRUE;    //If the function did not return FALSE until now, the lists are equal.
 }
 StrList* StrList_clone(const StrList* list)
 {
-    StrList* output = StrList_alloc();
-    Node* list_node = list->head;
+    StrList* output = StrList_alloc();  //Allocating memory for the new list.
+    Node* new_list_node = list->head;       //A pointer to the head of the list. So we can traverse the list.
     for (size_t i = 0; i < StrList_size(list); i++)
     {
-        char* data=NULL;
-        strcpy(data,list_node->data);
+        char* data= (char*)malloc(strlen(new_list_node->data)+1); //Allocating memory for the new node's data.
+        strcpy(data,new_list_node->data);
         StrList_insertLast(output, data);
-        list_node = list_node->next;
+        free(data);
+        new_list_node = new_list_node->next;
     }
     return output;
 }
-void copy_Node(Node* dst, Node* src)
-{
-    strcpy(dst->data,src->data);
-    dst->next = src->next;
-}
+
 void StrList_reverse( StrList* StrList)
 {
-    if(StrList_size(StrList) == 0 || StrList_size(StrList) == 1)
+    if(StrList_size(StrList) == 0 || StrList_size(StrList) == 1)    //If the list is empty or has only one node, there is no need to reverse it.
     {
         return;
     }
     Node* current = StrList->head;
-    Node* previous = NULL;
-    Node* next = NULL;
-    while (current != NULL)
+    Node* previous = NULL;  //Pointer to the previous node.
+    Node* next = NULL;      //Pointer to the next node.
+    while (current != NULL) //Traversing the list and reversing the "next" of each node.
     {
         next = current->next;
         current->next = previous;
         previous = current;
         current = next;
     }
-    StrList->head = previous;
+    StrList->head = previous;   //Setting the head of the list to be the last node.
 }
 
-void SwapNodes(Node* a, Node* b)
+void SwapNodes(Node* a, Node* b)    //Swaps the data of two nodes.
 {
     char* temp = a->data;
     a->data = b->data;
@@ -271,6 +265,7 @@ void SwapNodes(Node* a, Node* b)
 void StrList_sort( StrList* StrList)
 {
     Node* current = StrList->head;
+    //Bubble sort
     for (size_t i = 0; i < StrList_size(StrList)-1; i++)
     {
         for (size_t j = 0; j < StrList_size(StrList)-i-1; j++)
@@ -300,4 +295,3 @@ int StrList_isSorted(StrList* StrList)
 }
 
 #endif
-    

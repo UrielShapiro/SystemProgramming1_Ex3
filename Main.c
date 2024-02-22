@@ -11,7 +11,7 @@ char* inputString()
     while (c !=' '&& c != '\n')
     {
         size_t size = strlen(str);
-        str = (char*)realloc(str, size+ 2 * sizeof(char));
+        str = (char*)realloc(str, size + 2 * sizeof(char));
         str[size]=c;
         str[size+1]='\0';
         c = getchar();
@@ -29,6 +29,7 @@ StrList* scanList(StrList* list)
         char* str = inputString();
         num_of_elements--;
         StrList_insertLast(list, str);
+        free(str);
     }
     return list;
 }
@@ -45,6 +46,7 @@ void insertAt(StrList* list)
     }
     char* str = inputString();
     StrList_insertAt(list, str, index);
+    free(str);
 }
 
 int main() {
@@ -55,6 +57,10 @@ int main() {
     {
        switch (choice) {
         case 1:
+            if (list == NULL)
+            {
+                list = StrList_alloc();
+            }
             scanList(list);
             break;
         case 2:
@@ -83,10 +89,12 @@ int main() {
             getchar();
             char* str_7 = inputString();
             printf("%d\n", StrList_count(list, str_7));
+            free(str_7);
             break;
         case 8:
-            const char* str_8 = inputString();
+            const char* str_8 = inputString();  //The string to be removed (const char* because thats the type of the function's parameter).
             StrList_remove(list, str_8);
+            free((char*)str_8);
             break;
         case 9:
             int index_9;
@@ -115,8 +123,9 @@ int main() {
             break;
 
         }
-        scanf("%d", &choice);
+        scanf("%d", &choice);   //Scan the next choice.
     }
-     return 0;
+    StrList_free(list);     //Before the program ends, free the list.
+    return 0;
 
 }
