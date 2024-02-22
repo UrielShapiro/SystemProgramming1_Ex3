@@ -6,7 +6,7 @@
 char* inputString()
 {
     char* str = (char*)malloc(sizeof(char));
-    *str = '\0';          
+    *str = '\0';
     char c=getchar();
     while (c !=' '&& c != '\n')
     {
@@ -18,7 +18,6 @@ char* inputString()
     }
     return str;
 }
-
 
 StrList* scanList(StrList* list)
 {
@@ -37,6 +36,7 @@ void insertAt(StrList* list)
 {
     int index;
     scanf("%d", &index);
+    getchar();              //To clear the buffer from unintended space.
     size_t size = StrList_size(list);
     if(index > size+1)
     {
@@ -80,35 +80,30 @@ int main() {
             printf("%d\n", StrList_printLen(list));
             break; 
         case 7:
-            printf("Enter a string\n");
+            getchar();
             char* str_7 = inputString();
-            printf("The amount of times the string appears in the list is: %d\n", StrList_count(list, str_7));
+            printf("%d\n", StrList_count(list, str_7));
             break;
         case 8:
-            printf("Enter a string: \n");
             const char* str_8 = inputString();
             StrList_remove(list, str_8);
-            StrList_print(list);
             break;
         case 9:
             int index_9;
             scanf("%d", &index_9);
-            // if(index_9 <= StrList_size(list))
-            // {
+            if(index_9 <= StrList_size(list))
+            {
                 StrList_removeAt(list, index_9);
-            // }
+            }
             break;
         case 10:
             StrList_reverse(list);
             break;
         case 11:
             StrList_free(list);
-            StrList_print(list);
-            printf("The list is free\n");
             break;
         case 12:
             StrList_sort(list);
-            StrList_print(list);
             break;
         case 13:
             if(StrList_isSorted(list)) {

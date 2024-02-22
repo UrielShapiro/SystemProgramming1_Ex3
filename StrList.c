@@ -24,7 +24,8 @@ typedef struct _StrList StrList;
 Node* createNode(const char* data, Node* next)
 {
     Node* node=(Node*)malloc(sizeof(Node));
-    node->data = data;
+    node->data = (char*) malloc(strlen(data));
+    strcpy(node->data,data);
     node->next = next;
     return node;
 }
@@ -45,12 +46,10 @@ void StrList_insertAt(StrList* StrList,const char* data,int index)
 {
     Node* temp;
     Node* node;
-    // char* str = (char*)malloc(sizeof(char) * strlen(data));
-    // strcpy(str, data);
     if(StrList->size == 0 || index == 0)
     {
         node = createNode(data, StrList->head);
-        StrList->head=node;
+        StrList->head = node;
     }
     else
     {
@@ -85,15 +84,20 @@ char* StrList_firstData(const StrList* StrList)
 }
 void StrList_printAt(const StrList* Strlist,int index)
 {
-        Node* temp = Strlist->head;
-        for(size_t i=0; i<index;i++)
-        {
-            temp = temp->next;
-        }
-        printf("%s\n",temp->data);
+    Node* temp = Strlist->head;
+    for(size_t i=0; i<index;i++)
+    {
+        temp = temp->next;
+    }
+    printf("%s\n",temp->data);
 }
 void StrList_print(const StrList* StrList)
 {
+    if(StrList->size == 0)
+    {
+        printf("\n");   //As required by the tests
+        return;         //Nothing else to print.
+    }
     Node* temp = StrList->head;
     for (size_t size = 0; size<StrList->size - 1;size++)
     {
@@ -132,13 +136,13 @@ void StrList_removeAt(StrList* StrList, int index)
 {
     if (StrList->size == 0)
     {
-        printf("The list is empty\n");
         return;
     }
     Node* p1 = StrList->head;
     Node* p2 = p1->next;
     if (index == 0)
     {
+        free(StrList->head->data);
         free(StrList->head);
         StrList->head = p2;
         StrList->size--;
@@ -152,6 +156,7 @@ void StrList_removeAt(StrList* StrList, int index)
         i++;
     }
     p1->next = p2->next;
+    free(p2->data);
     free(p2);
     StrList->size--;
 }
@@ -161,12 +166,12 @@ void StrList_free(StrList* StrList)
     {
         StrList_removeAt(StrList, 0);   //remove the head of the list, StrList_size times. eventually the list will be empty.
     }
+    StrList->head = NULL;
 }
 void StrList_remove(StrList* StrList, const char* data)
 {
     if (StrList->size == 0)
     {
-        printf("The list is empty\n");
         return;
     }
     Node* p1=StrList->head;
