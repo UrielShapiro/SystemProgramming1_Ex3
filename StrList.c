@@ -21,22 +21,21 @@ struct _StrList
 };
 typedef struct _StrList StrList;
 
-Node* createNode(const char* data, Node* next)
+Node* createNode(const char* data, Node* next)      //Allocates memory for a new node with the given data.
 {
     Node* node=(Node*)malloc(sizeof(Node));
-    node->data = (char*) malloc(strlen(data));
+    node->data = (char*) malloc(strlen(data));  //data is a valid string, so we can use strlen to get the length of the string (it has \0 at the end).
     strcpy(node->data,data);
     node->next = next;
     return node;
 }
 StrList* StrList_alloc()
 {
-    StrList* sList = (StrList*)malloc(sizeof(StrList));
-    sList->size = 0;
+    StrList* sList = (StrList*)malloc(sizeof(StrList));  //Allocates memory for a new StrList.
+    sList->size = 0;                                    //Initializes the size of the list to 0.
     sList->head = NULL;
     return sList;
 }
-
 
 size_t StrList_size(const StrList* StrList)
 {
@@ -44,43 +43,42 @@ size_t StrList_size(const StrList* StrList)
 }
 void StrList_insertAt(StrList* StrList,const char* data,int index)
 {
-    Node* temp;
-    Node* node;
-    if(StrList->size == 0 || index == 0)
+    Node* temp;             //A temporary node to traverse the list.
+    Node* node;             //Initializing the new node to be inserted.
+    if(StrList->size == 0 || index == 0) //If the list is empty or the index is 0, the new node will be the head of the list.
     {
         node = createNode(data, StrList->head);
-        StrList->head = node;
+        StrList->head = node;           //Setting the head of the list to be the new node.
     }
     else
     {
         temp = StrList->head;
         size_t i = 0;
-        while(i < index-1)
+        while(i < index-1)  //Traversing the list to the node before the index.
         {
             temp = temp->next;
             i++;
         }
         if (index == StrList->size)
         {
-            node= createNode(data,NULL);
+            node= createNode(data,NULL); //If the index is the last node, the new node will be the last node, therefore its "next" will be NULL.
         }
         else
         {
-            node = createNode(data,temp->next);
+            node = createNode(data,temp->next); //If the index is not the last node, the new node will be inserted between the node before the index and the node at the index.
         }
-        temp->next=node;
+        temp->next=node;    //Setting the "next" of the node before the index to be the new node.
     }
-    StrList->size = StrList->size+1;
+    StrList->size = StrList->size+1;    //Increasing the size of the list by 1.
 }
 
 void StrList_insertLast(StrList* StrList,const char* data)
 {
-       StrList_insertAt(StrList, data, StrList->size);
+       StrList_insertAt(StrList, data, StrList->size);  //Inserting the new node at the last index of the list using the InsertAt function.
 }
 char* StrList_firstData(const StrList* StrList)
 {
-    char* output = StrList->head->data;
-    return output;
+    return StrList->head->data;
 }
 void StrList_printAt(const StrList* Strlist,int index)
 {
