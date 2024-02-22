@@ -35,7 +35,6 @@ StrList* scanList(StrList* list)
 }
 void insertAt(StrList* list)
 {
-    printf("Enter an index\n");
     int index;
     scanf("%d", &index);
     size_t size = StrList_size(list);
@@ -44,7 +43,6 @@ void insertAt(StrList* list)
         printf("error! can't insert to this index because it's out of range\n");
         return;
     }
-    printf("Enter a string\n");
     char* str = inputString();
     StrList_insertAt(list, str, index);
 }
@@ -69,7 +67,6 @@ int main() {
             printf("%ld\n", StrList_size(list));
             break;
         case 5:
-            printf("Enter an index\n");
             int index_5;
             scanf("%d", &index_5);
             if(index_5 > StrList_size(list))
@@ -80,7 +77,7 @@ int main() {
             StrList_printAt(list, index_5);
             break;
         case 6:
-            printf("The amount of chars in the string is: %d\n", StrList_printLen(list));
+            printf("%d\n", StrList_printLen(list));
             break; 
         case 7:
             printf("Enter a string\n");
@@ -94,15 +91,15 @@ int main() {
             StrList_print(list);
             break;
         case 9:
-            printf("Enter an index\n");
             int index_9;
             scanf("%d", &index_9);
-            StrList_removeAt(list, index_9);
-            StrList_print(list);
+            // if(index_9 <= StrList_size(list))
+            // {
+                StrList_removeAt(list, index_9);
+            // }
             break;
         case 10:
             StrList_reverse(list);
-            StrList_print(list);
             break;
         case 11:
             StrList_free(list);

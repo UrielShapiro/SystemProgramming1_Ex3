@@ -21,9 +21,9 @@ struct _StrList
 };
 typedef struct _StrList StrList;
 
-Node* createNode(char* data, Node* next)
+Node* createNode(const char* data, Node* next)
 {
-    Node* node=(Node*)malloc (sizeof(Node));
+    Node* node=(Node*)malloc(sizeof(Node));
     node->data = data;
     node->next = next;
     return node;
@@ -45,11 +45,11 @@ void StrList_insertAt(StrList* StrList,const char* data,int index)
 {
     Node* temp;
     Node* node;
-    char* str = (char*)malloc(sizeof(char) * strlen(data));
-    strcpy(str, data);
+    // char* str = (char*)malloc(sizeof(char) * strlen(data));
+    // strcpy(str, data);
     if(StrList->size == 0 || index == 0)
     {
-        node = createNode(str, StrList->head);
+        node = createNode(data, StrList->head);
         StrList->head=node;
     }
     else
@@ -63,11 +63,11 @@ void StrList_insertAt(StrList* StrList,const char* data,int index)
         }
         if (index == StrList->size)
         {
-            node= createNode(str,NULL);
+            node= createNode(data,NULL);
         }
         else
         {
-            node = createNode(str,temp->next);
+            node = createNode(data,temp->next);
         }
         temp->next=node;
     }
@@ -90,16 +90,17 @@ void StrList_printAt(const StrList* Strlist,int index)
         {
             temp = temp->next;
         }
-        printf("%s \n",temp->data);
+        printf("%s\n",temp->data);
 }
 void StrList_print(const StrList* StrList)
 {
     Node* temp = StrList->head;
-    for (size_t size = 0; size<StrList->size;size++)
+    for (size_t size = 0; size<StrList->size - 1;size++)
     {
         printf("%s ",temp->data);
         temp = temp->next;
     }
+    printf("%s",temp->data);
     printf("\n");
 }
 int StrList_printLen(const StrList* Strlist)
