@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 #include <stdlib.h>
 #include "StrList.h"
 #ifndef _STRLIST_C
@@ -24,7 +23,7 @@ typedef struct _StrList StrList;
 Node* createNode(const char* data, Node* next)      //Allocates memory for a new node with the given data.
 {
     Node* node=(Node*)malloc(sizeof(Node));
-    node->data = (char*) malloc(strlen(data));  //data is a valid string, so we can use strlen to get the length of the string (it has \0 at the end).
+    node->data = (char*) malloc(strlen(data) + sizeof(char)); //Allocates memory for the data of the new node. +1 for the \0.
     strcpy(node->data,data);
     node->next = next;
     return node;
@@ -132,7 +131,7 @@ int StrList_count(StrList* StrList, const char* data)
 }
 void StrList_removeAt(StrList* StrList, int index)
 {
-    if (StrList->size == 0)
+    if (StrList->size == 0 || index >= StrList->size)
     {
         return;
     }
@@ -140,31 +139,32 @@ void StrList_removeAt(StrList* StrList, int index)
     Node* p2 = p1->next;
     if (index == 0)
     {
-        free(StrList->head->data);
-        free(StrList->head);
+        free(p1->data);
+        free(p1);
         StrList->head = p2;
         StrList->size--;
         return;
     }
     size_t i = 0;
-    while (i < index-1)
+    while (i < index - 1)
     {
         p1 = p2;
         p2 = p2->next;
         i++;
     }
-    p1->next = p2->next;
+    p1->next = p2->next;    //To keep the list connected after removing the node.
     free(p2->data);
     free(p2);
     StrList->size--;
 }
 void StrList_free(StrList* StrList)
 {
-    while(StrList_size(StrList) > 0)    //Will run as long as the list is not empty.
+    while(StrList->size > 0)    //Will run as long as the list is not empty.
     {
         StrList_removeAt(StrList, 0);   //remove the head of the list, StrList_size times. eventually the list will be empty.
     }
     free(StrList);  //Free the list itself.
+    StrList = NULL; //Set the pointer to NULL.
 }
 void StrList_remove(StrList* StrList, const char* data)
 {

@@ -53,7 +53,7 @@ int main() {
     int choice;
     StrList* list = StrList_alloc();
     scanf("%d", &choice);
-    while (choice!=0)
+    while (choice != 0)
     {
        switch (choice) {
         case 1:
@@ -125,7 +125,9 @@ int main() {
         }
         scanf("%d", &choice);   //Scan the next choice.
     }
-    StrList_free(list);     //Before the program ends, free the list.
+    if(list != NULL)
+    {
+        StrList_free(list);     //Before the program ends, free the list.
+    }
     return 0;
-
 }
