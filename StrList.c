@@ -164,7 +164,6 @@ void StrList_free(StrList* StrList)
         StrList_removeAt(StrList, 0);   //remove the head of the list, StrList_size times. eventually the list will be empty.
     }
     free(StrList);  //Free the list itself.
-    StrList = NULL; //Set the pointer to NULL.
 }
 void StrList_remove(StrList* StrList, const char* data)
 {
