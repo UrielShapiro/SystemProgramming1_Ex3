@@ -19,4 +19,4 @@ StrList.a: StrList.o
 	$(AR) -rcs $@ $^
 
 clean: 
-	rm -f *.o *.a *.so $(EXECUTABLES)
+	rm -f *.o *.a $(EXECUTABLES)

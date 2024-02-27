@@ -2,8 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "StrList.h"
-#ifndef _STRLIST_C
-#define _STRLIST_C
 #define FALSE 0
 #define TRUE 1
 struct _Node
@@ -269,7 +267,7 @@ void StrList_sort( StrList* StrList)
     {
         for (size_t j = 0; j < StrList_size(StrList)-i-1; j++)
         {
-            if(strcmp(current->data,current->next->data) > 0)
+            if(strcmp(current->data,current->next->data) > 0)   //If the data of the current node is greater than the data of the next node, swap the nodes.
             {
                 SwapNodes(current, current->next);
             }
@@ -281,16 +279,20 @@ void StrList_sort( StrList* StrList)
 
 int StrList_isSorted(StrList* StrList)
 {
+    //If the list is empty or has only one node, it is sorted.
+    if (StrList->size == 1 || StrList->size == 0)
+    {
+        return TRUE;
+    }
+    
     Node* current = StrList->head;
     for (size_t i = 0; i < StrList_size(StrList)-1; i++)
     {
-        if(strcmp(current->data,current->next->data) > 0)
+        if(strcmp(current->data,current->next->data) > 0)   //If the data of the current node is greater than the data of the next node, the list is not sorted.
         {
             return FALSE;
         }
         current = current->next;
     }
-    return TRUE;
+    return TRUE;    //If the function did not return FALSE until now, the list is sorted.
 }
-
-#endif
